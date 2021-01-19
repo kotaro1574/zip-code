@@ -1,18 +1,27 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <input type="text" maxlength="7" v-model="zipcode">
+    <button @click="search()">住所自動入力</button>
+    <p>Address：{{ address }}</p>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import axios from "axios";
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      zipcode: "",
+      address: ""
+    };
+  },
+  methods: {
+    async search() {
+      const address = await axios.get(`https://apis.postcode-jp.com/api/v4/postcodes/${this.zipcode}?apikey=ggw9X7s8Q6v6Au8ceYhhapmW3ZcnhTUbRhPbHmA`);
+
+      const addressData = address.data;
+      this.address = addressData[0].allAddress;
+    }
   }
 }
 </script>
